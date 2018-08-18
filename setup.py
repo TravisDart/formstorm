@@ -9,9 +9,9 @@ tests_require = [
 
 
 setup(
-    name='form',
+    name='formstorm',
     version=version_string,
-    url='http://github.com/coddingtonbear/django-mailbox/',
+    url='https://github.com/TravisDart/formstorm/',
     description=(
         'A tool to test forms by trying (almost) every '
         'combination of valid and invalid input.'
@@ -33,6 +33,6 @@ setup(
     ],
     packages=find_packages(),
     include_package_data=True,
-    test_suite='nose.collector',
+    # test_suite='nose.collector',
     tests_require=['django'],
 )

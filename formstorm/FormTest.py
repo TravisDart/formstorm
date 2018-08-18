@@ -16,6 +16,9 @@ class FormTest(object):
 
 	def submit_form(self, form_params):
 		self.bound_form = self.form(form_params)
+		print "self.bound_form", self.bound_form
+		print "self.bound_form", self.bound_form.errors()
+		print "self.bound_form", self.bound_form.is_valid()
 		self.bound_form.save()
 
 	
