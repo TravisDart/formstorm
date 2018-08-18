@@ -5,16 +5,19 @@ from django.test import TestCase
 
 class BookFormTest(FormTest):
 	form = BookForm
-	name = FormElement(
+	title = FormElement(
 		good = ["Moby Dick"],
-		bad = [None, ''],
+		bad = [None, '', "A"*101],
 	)
-	sub_title = FormElement(
+	subtitle = FormElement(
 		good = [None, "", "or The Whale"],
+		bad = ["A"*101]
 	)
 
 
 class BookTestCase(TestCase):
+    def setUp(self):
+        self.theBookFormTest = BookFormTest()
+
     def test_book_form(self):
-        theTest = BookFormTest()
-        theTest.run()
+        self.theBookFormTest.run()

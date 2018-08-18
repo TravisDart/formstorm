@@ -11,10 +11,10 @@ class Author(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=3, choices=TITLE_CHOICES)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=100, blank=False, null=False)
-    sub_title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    subtitle = models.CharField(max_length=100, blank=True, null=True)

@@ -50,6 +50,7 @@ class FormTest(object):
 				sid = transaction.savepoint()
 
 				self.submit_form(form_values)
+				print "{},{},{}".format(form_values["title"], form_values["subtitle"], form_is_good) 
 				assert self.is_good() == form_is_good
 
 				if is_uniqueness_test:
