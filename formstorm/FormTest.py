@@ -14,12 +14,10 @@ class FormTest(object):
 		return self.bound_form.is_valid()
 
 
-	def submit_form(self, form_params):
-		self.bound_form = self.form(form_params)
-		print "self.bound_form", self.bound_form
-		print "self.bound_form", self.bound_form.errors()
-		print "self.bound_form", self.bound_form.is_valid()
-		self.bound_form.save()
+	def submit_form(self, form_values):
+		self.bound_form = self.form(form_values)
+		if self._is_modelform and self.bound_form.is_good():
+			self.bound_form.save()
 
 	
 	def __init__(self):
@@ -33,19 +31,14 @@ class FormTest(object):
 		self._is_modelform = type(self.form) == ModelForm
 
 
-	@transaction.atomic
-	def _do_step(self, form_params, should_rollback=True):
-		self.submit_form(form_params)
-		if should_rollback:
-			transaction.rollback()
-
-
 	def run(self):
-		for is_modelform in set([False, self._is_modelform]):
+		for is_uniqueness_test in set([False, self._is_modelform]):
 			for i in self._iterator:
 				# i is a dictionary whose elements are tuples
 				# in the form (value, is_good)
-				should_be_good = reduce(
+				
+				# if any field is invalid, the form is invalid.
+				form_is_good = reduce(
 					lambda x, y: x[1][1] and y[1][1],
 					i.items()
 				)
@@ -54,6 +47,12 @@ class FormTest(object):
 					for k, v in i.items()
 				}
 
-				self.submit_form(form_params=i)
-				print i, self.is_good(), should_be_good
-				assert self.is_good() == should_be_good
+				sid = transaction.savepoint()
+
+				self.submit_form(form_values)
+				assert self.is_good() == form_is_good
+
+				if is_uniqueness_test:
+					transaction.savepoint_commit(sid)
+				else:
+					transaction.savepoint_rollback(sid)
