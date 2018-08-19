@@ -1,15 +1,15 @@
 from django.db import models
 
-TITLE_CHOICES = (
-    ('MR', 'Mr.'),
-    ('MRS', 'Mrs.'),
-    ('MS', 'Ms.'),
-)
-
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
-    title = models.CharField(max_length=3, choices=TITLE_CHOICES)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.name
@@ -18,3 +18,11 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100, blank=True, null=True)
+    author = models.ForeignKey(Author)
+    is_fiction = models.BooleanField(default=False)
+    pages = models.IntegerField(default=False)
+    genre = models.ManyToManyField(Genre)
+
+
+    def __unicode__(self):
+        return self.name

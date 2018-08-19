@@ -1,7 +1,6 @@
 # FormStorm
 
-A tool to test forms by trying (almost) every combination of valid and invalid input.
-It's sort of like a brute-force attack on your form.
+A library to test forms by trying (almost) every combination of valid and invalid input. - Sort of like a brute-force attack on your form.
 
 
 ## Example:

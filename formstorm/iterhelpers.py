@@ -1,10 +1,16 @@
 import itertools
 
 
-def full_combo(items):
+def every_combo(items):
+    """
+        Given a list of n items, return every combination of length 1 .. n.
+        
+        list(every_combo([1, 2, 3]))  
+        [(1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+    """
     return itertools.chain(*[
         itertools.combinations(items, i)
-        for i in range(len(items) + 1)
+        for i in range(1, len(items) + 1)
     ])
 
 
