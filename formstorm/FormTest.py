@@ -32,7 +32,7 @@ class FormTest(object):
                 except:
                     ref_model = None
     
-                self.elements[key] = getattr(self, e).build_iterator(
+                self.elements[e] = getattr(self, e).build_iterator(
                     is_e2e=self.is_e2e,
                     ref_model=ref_model
                 )
@@ -52,10 +52,7 @@ class FormTest(object):
                 # in the form (value, is_good)
                 
                 # if any field is invalid, the form is invalid.
-                form_is_good = reduce(
-                    lambda x, y: x[1][1] and y[1][1],
-                    i.items()
-                )
+                form_is_good = all([x[1][1] for x in i.items()])
                 form_values = {
                     k:v[0]
                     for k, v in i.items()
@@ -64,7 +61,6 @@ class FormTest(object):
                 sid = transaction.savepoint()
 
                 self.submit_form(form_values)
-                print "{},{},{}".format(form_values["title"], form_values["subtitle"], form_is_good) 
                 assert self.is_good() == form_is_good
 
                 if is_uniqueness_test:

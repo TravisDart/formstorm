@@ -20,7 +20,7 @@ class FormElement(object):
                 if is_e2e:  # If we're doing an e2e test, reference by name.
                     self.good[i] = unicode(ref_object)
                 else:
-                    self.good[i] = ref_object.fk
+                    self.good[i] = ref_object.pk
 
         self.iterator = chain(
             [(x, True) for x in self.good],
