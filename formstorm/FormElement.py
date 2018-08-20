@@ -17,7 +17,6 @@ class FormElement(object):
         self.only_if = only_if
         self.not_if = not_if
 
-
     def build_iterator(self, ref_model, is_e2e):
         for i, g in enumerate(self.good):
             if type(g) is Q:
@@ -32,5 +31,5 @@ class FormElement(object):
             [(x, False) for x in self.bad],
             # self.values
         )
-        
+
         return self.iterator
