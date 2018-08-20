@@ -11,6 +11,7 @@ class BookFormTest(FormTest):
     title = FormElement(
         good = ["Moby Dick"],
         bad = [None, '', "A"*101],
+        unique=True
     )
     subtitle = FormElement(
         good = [None, "", "or The Whale"],

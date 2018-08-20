@@ -84,6 +84,7 @@ Basically, all fields work as above, with the exception of ForeignKey and Many2M
 
 ## TODO:
 
+- Test to ensure that uniqueness constraints work. - Some provision for this feature has already been made, but it hasn't been fully implemented yet. 
 - End-to-end testing (with Selenium): This is partially implemented, and all of the necessary FormStorm functions have been abstracted. Just need to subclass FormTest and fully implement.
 - Tests for DRF Serializers. "SerializerStorm"
 - Set up CI
@@ -98,7 +99,7 @@ Basically, all fields work as above, with the exception of ForeignKey and Many2M
             def clean():
                 if self.is_company and not self.company_name:
                     raise ValidationError("Please specify a company name.")
-                elif not self.individual_name:
+                elif not self.is_company and not self.individual_name:
                     raise ValidationError("Please provide your first and last name.")
         
         
