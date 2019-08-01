@@ -1,8 +1,8 @@
 from formstorm import FormTest, FormElement
 from formstorm.iterhelpers import every_combo
-from forms import BookForm
+from .forms import BookForm
 from django.test import TestCase
-from models import Author, Genre
+from .models import Author, Genre
 from django.db.models import Q
 
 

@@ -1,7 +1,7 @@
-from FormElement import FormElement
+from .FormElement import FormElement
 from django.db import transaction
 from django.forms import ModelForm
-from iterhelpers import dict_combo
+from .iterhelpers import dict_combo
 
 
 class FormTest(object):
@@ -13,7 +13,6 @@ class FormTest(object):
     def submit_form(self, form_values):
         self.bound_form = self.form(form_values)
         if self._is_modelform and self.bound_form.is_valid():
-            print "Save!"
             self.bound_form.save()
 
     def _build_elements(self):
@@ -22,10 +21,13 @@ class FormTest(object):
             # Filter out this class's FormElement properties
             if type(getattr(self, e)) is FormElement:
                 # If this field is a fk/m2m, get the model that it points to.
-                try:
-                    ref_model = self.form._meta.model._meta.get_field(e).rel.to
+                try:  # Python 3
+                    ref_model = self.form._meta.model._meta.get_field(e).remote_field.model
                 except AttributeError:
-                    ref_model = None
+                    try:
+                        ref_model = self.form._meta.model._meta.get_field(e).rel.to
+                    except AttributeError:
+                        ref_model = None
 
                 self.elements[e] = getattr(self, e).build_iterator(
                     is_e2e=self.is_e2e,
