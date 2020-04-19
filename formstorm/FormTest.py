@@ -21,11 +21,12 @@ class FormTest(object):
             # Filter out this class's FormElement properties
             if type(getattr(self, e)) is FormElement:
                 # If this field is a fk/m2m, get the model that it points to.
+                form_field = self.form._meta.model._meta.get_field(e)
                 try:  # Python 3
-                    ref_model = self.form._meta.model._meta.get_field(e).remote_field.model
+                    ref_model = form_field.remote_field.model
                 except AttributeError:
                     try:
-                        ref_model = self.form._meta.model._meta.get_field(e).rel.to
+                        ref_model = form_field.rel.to
                     except AttributeError:
                         ref_model = None
 

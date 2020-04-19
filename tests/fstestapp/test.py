@@ -4,6 +4,14 @@ from .forms import BookForm
 from django.test import TestCase
 from .models import Author, Genre
 from django.db.models import Q
+from django.apps import apps
+from fstestapp.apps import FSTestAppConfig
+
+
+class AppConfigTest(TestCase):
+    def test_apps(self):
+        self.assertEqual(FSTestAppConfig.name, 'fstestapp')
+        self.assertEqual(apps.get_app_config('fstestapp').name, 'fstestapp')
 
 
 class BookFormTest(FormTest):
@@ -49,3 +57,4 @@ class BookTestCase(TestCase):
 
     def test_book_form(self):
         self.theBookFormTest.run()
+

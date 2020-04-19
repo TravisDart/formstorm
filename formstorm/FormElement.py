@@ -1,5 +1,6 @@
 from itertools import chain
 from django.db.models import Q
+from six import text_type
 
 
 class FormElement(object):
@@ -22,7 +23,7 @@ class FormElement(object):
             if type(g) is Q:
                 ref_object = ref_model.objects.get(g)
                 if is_e2e:  # If we're doing an e2e test, reference by name.
-                    self.good[i] = unicode(ref_object)
+                    self.good[i] = text_type(ref_object)
                 else:
                     self.good[i] = ref_object.pk
 
