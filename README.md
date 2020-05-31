@@ -16,7 +16,7 @@ of valid and invalid values for each field:
     
     class Book(models.Model):
         title = models.CharField(max_length=100, blank=False, null=False)
-        subtitle = models.CharField(max_length=100)
+        subtitle = models.CharField(max_length=100, blank=True, default="")
     
     
     class BookForm(ModelForm):
@@ -29,11 +29,11 @@ of valid and invalid values for each field:
     	form = BookForm
     	title = FormElement(
     		good = ["Moby Dick"],
-    		bad = [None, '', 'A'*101],
+    		bad = [None, "", "A"*101],
     	)
     	subtitle = FormElement(
-    		good = [None, "", "or The Whale"],
-    		bad = ["A"*101]
+    		good = ["", "or The Whale"],
+    		bad = [None, "A"*101]
     	)
     
     
@@ -51,11 +51,11 @@ each field's possible values. Namely, the form will be tested with these values:
 
 |  title    | subtitle     | result  | 
 |-----------|--------------|---------| 
-| Moby Dick | None         | Valid   | 
+| Moby Dick | ""           | Valid   | 
+| Moby Dick | None         | Invalid | 
 | None      | None         | Invalid | 
 | ""        | None         | Invalid | 
 | AA[...]AA | None         | Invalid | 
-| Moby Dick | ""           | Valid   | 
 | None      | ""           | Invalid | 
 | ""        | ""           | Invalid | 
 | AA[...]AA | ""           | Invalid | 

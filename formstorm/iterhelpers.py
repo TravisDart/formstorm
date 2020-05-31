@@ -8,10 +8,9 @@ def every_combo(items):
         list(every_combo([1, 2, 3]))
         [(1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
     """
-    return itertools.chain(*[
-        itertools.combinations(items, i)
-        for i in range(1, len(items) + 1)
-    ])
+    x = [itertools.combinations(items, i) for i in range(1, len(items) + 1)]
+    y = list(itertools.chain(*x))
+    return y
 
 
 def dict_combo(params):
@@ -22,36 +21,33 @@ def dict_combo(params):
         "c": [True, False, None],
     }
     for x in dict_combo(params):
-        print x
+        print(x)
 
     Returns:
-        {'a': 'A', 'c': True, 'b': 0}
-        {'a': 'A', 'c': True, 'b': 1}
-        {'a': 'A', 'c': False, 'b': 0}
-        {'a': 'A', 'c': False, 'b': 1}
-        {'a': 'A', 'c': None, 'b': 0}
-        {'a': 'A', 'c': None, 'b': 1}
-        {'a': 'B', 'c': True, 'b': 0}
-        {'a': 'B', 'c': True, 'b': 1}
-        {'a': 'B', 'c': False, 'b': 0}
-        {'a': 'B', 'c': False, 'b': 1}
-        {'a': 'B', 'c': None, 'b': 0}
-        {'a': 'B', 'c': None, 'b': 1}
-        {'a': 'C', 'c': True, 'b': 0}
-        {'a': 'C', 'c': True, 'b': 1}
-        {'a': 'C', 'c': False, 'b': 0}
-        {'a': 'C', 'c': False, 'b': 1}
-        {'a': 'C', 'c': None, 'b': 0}
-        {'a': 'C', 'c': None, 'b': 1}
+        {'a': 'A', 'b': 0, 'c': True}
+        {'a': 'A', 'b': 0, 'c': False}
+        {'a': 'A', 'b': 0, 'c': None}
+        {'a': 'A', 'b': 1, 'c': True}
+        {'a': 'A', 'b': 1, 'c': False}
+        {'a': 'A', 'b': 1, 'c': None}
+        {'a': 'B', 'b': 0, 'c': True}
+        {'a': 'B', 'b': 0, 'c': False}
+        {'a': 'B', 'b': 0, 'c': None}
+        {'a': 'B', 'b': 1, 'c': True}
+        {'a': 'B', 'b': 1, 'c': False}
+        {'a': 'B', 'b': 1, 'c': None}
+        {'a': 'C', 'b': 0, 'c': True}
+        {'a': 'C', 'b': 0, 'c': False}
+        {'a': 'C', 'b': 0, 'c': None}
+        {'a': 'C', 'b': 1, 'c': True}
+        {'a': 'C', 'b': 1, 'c': False}
+        {'a': 'C', 'b': 1, 'c': None}
     """
     # We don't want the key-->value paring to get mismatched.
     # Convert a dictionary to (key, value) tuples,
     # Then convert to a list of keys and a list of values
     # The index of the key will be the index of the value.
-    keys, values = zip(*[
-        (key, value)
-        for key, value in params.items()
-    ])
+    keys, values = zip(*[(key, value) for key, value in params.items()])
     # Take the cartesian product of all the sets.
     # This will return an iterator with one item from each set,
     # We take this an pack it back into a dictionary.
