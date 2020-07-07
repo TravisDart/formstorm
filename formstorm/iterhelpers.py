@@ -1,4 +1,5 @@
 import itertools
+import copy
 
 
 def every_combo(items):
@@ -13,7 +14,7 @@ def every_combo(items):
     return y
 
 
-def dict_combo(params):
+def dict_combo(params, base_dict={}):
     """
     params = {
         "a": ["A","B","C"],
@@ -52,7 +53,7 @@ def dict_combo(params):
     # This will return an iterator with one item from each set,
     # We take this an pack it back into a dictionary.
     for y in itertools.product(*values):
-        out_dict = {}
+        out_dict = copy.copy(base_dict)
         for i in range(len(y)):
             out_dict[keys[i]] = y[i]
         yield out_dict

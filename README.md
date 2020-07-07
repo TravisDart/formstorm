@@ -1,8 +1,6 @@
 # FormStorm (v1.0.0)
 
-A library to test Django forms by trying (almost) every combination of valid and invalid input. - Sort of like a brute-force attack on your form.
-
-Rather than testing each field's validation independently, formstorm tests all of the fields' validation simultaniously to ensure that there is no interdependence between fields.
+A library to test Django forms by trying (almost) every combination of valid and invalid input. Rather than testing each field's validation independently, formstorm tests all of the fields' validation simultaneously to ensure that there is no interdependence between fields.
 
 Note that Version 1 only verifies that there is no interdependence between fields. The next version will be able to test forms that have multi-field and interdependent validation.
 
@@ -84,23 +82,21 @@ An example showing how to use different field types can be found in [tests/fstes
 
 Basically, all fields work as above, with the exception of ForeignKey and Many2Many fields whose values must be specified with `Q()` objects. Also, example values for multi-valued fields (such as Many2Many) can be created with the `every_combo()` function which returns every combination of the Many2Many options.
 
+To test the validation of multiple fields, 
+
+    additional_values = [
+        ({'title': "A"*100, 'subtitle': "A"*50}, True),
+        ({'title': "A"*50, 'subtitle': "A"*100}, True),
+        ({'title': "A"*100, 'subtitle': "A"*51}, False),
+        ({'title': "A"*51, 'subtitle': "A"*100}, False),
+    ]
+
 ## Install:
 
     pip install formstorm
 
 ## TODO:
 
-- Implement ability to test multi-field and interdependent validation. Rather than specifying good/bad values, give the option to pass an iterator that implements the conditional from validation and returns (value, is_good).
-
-        class AuthorFormTest(FormTest):
-            form = AuthorForm
-            field1 = FormElement(good=[...], bad=[...])
-            field2 = FormElement(good=[...], bad=[...])
-            field3 = FormElement(
-                values=ValueHelper(values_iterator, values=[...], depends_on=["field1","field2"])
-                good=[...],
-                bad=[...]
-            )
 - Test to ensure that uniqueness constraints work. - Some provision for this feature has already been made, but it hasn't been fully implemented yet. 
 - End-to-end testing (with Selenium): This is partially implemented, and all of the necessary FormStorm functions have been abstracted. Just need to subclass FormTest and fully implement.
 - Tests for DRF Serializers. "SerializerStorm"

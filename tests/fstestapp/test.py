@@ -36,6 +36,12 @@ class BookFormTest(FormTest):
         ]),
         bad=[None]
     )
+    additional_values = [
+        ({'title': "A"*100, 'subtitle': "A"*50}, True),
+        ({'title': "A"*50, 'subtitle': "A"*100}, True),
+        ({'title': "A"*100, 'subtitle': "A"*51}, False),
+        ({'title': "A"*51, 'subtitle': "A"*100}, False),
+    ]
 
 
 class UtilTest(TestCase):
@@ -72,6 +78,37 @@ class UtilTest(TestCase):
         ]
 
         assert list(x) == y
+
+    def test_dict_combo_with_base_dict(self):
+        x = dict_combo({
+            "a": ["A", "B", "C"],
+            "b": [0, 1],
+            "c": [True, False, None],
+        }, {"d": "A", "e": 0, 'f': True})
+
+        y = [
+            {'a': 'A', 'b': 0, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'A', 'b': 0, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'A', 'b': 0, 'c': None,  "d": "A", "e": 0, 'f': True},
+            {'a': 'A', 'b': 1, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'A', 'b': 1, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'A', 'b': 1, 'c': None,  "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 0, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 0, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 0, 'c': None,  "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 1, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 1, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'B', 'b': 1, 'c': None,  "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 0, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 0, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 0, 'c': None,  "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 1, 'c': True,  "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 1, 'c': False, "d": "A", "e": 0, 'f': True},
+            {'a': 'C', 'b': 1, 'c': None,  "d": "A", "e": 0, 'f': True},
+        ]
+
+        assert list(x) == y
+
 
 
 class BookTestCase(TestCase):
