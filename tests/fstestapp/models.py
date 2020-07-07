@@ -12,7 +12,6 @@ class Genre(models.Model):
 
 class Book(models.Model):
     def clean(self):
-        # Don't allow draft entries to have a pub_date.
         if len(self.title) + len(self.subtitle) > 150:
             raise ValidationError(
                 "Title and subtitle can't have a combined length greater than "

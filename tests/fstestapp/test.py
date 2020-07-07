@@ -11,6 +11,7 @@ class BookFormTest(FormTest):
     title = FormElement(
         good=["Moby Dick"],
         bad=[None, "", "A"*101],
+        is_unique=True
     )
     subtitle = FormElement(
         good=[None, "", "or The Whale"],
@@ -108,7 +109,6 @@ class UtilTest(TestCase):
         ]
 
         assert list(x) == y
-
 
 
 class BookTestCase(TestCase):

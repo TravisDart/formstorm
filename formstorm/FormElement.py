@@ -4,20 +4,10 @@ from six import text_type
 
 
 class FormElement(object):
-    def __init__(self,
-                 good=[],
-                 bad=[],
-                 values=[],
-                 only_if=[],
-                 not_if=[],
-                 unique=False,
-                 fk_field=None):
+    def __init__(self, good=[], bad=[], is_unique=False):
         self.bad = bad
         self.good = good
-        self.values = values
-        self.only_if = only_if
-        self.not_if = not_if
-
+        self.is_unique = is_unique 
 
     def build_iterator(self, form, field_name, is_e2e):
         """
@@ -67,6 +57,5 @@ class FormElement(object):
         self.iterator = chain(
             [(x, True) for x in self.good],
             [(x, False) for x in self.bad],
-            self.values
         )
         return self.iterator
