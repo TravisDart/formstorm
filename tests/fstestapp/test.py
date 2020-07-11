@@ -1,3 +1,4 @@
+import sys
 from formstorm import FormTest, FormElement
 from formstorm.iterhelpers import every_combo, dict_combo
 from .forms import BookForm
@@ -6,42 +7,78 @@ from .models import Author, Genre
 from django.db.models import Q
 
 
+# class BookFormTest(FormTest):
+#     form = BookForm
+#     title = FormElement(
+#         good=["Moby Dick"],
+#         bad=[None, "", "A"*101],
+#         is_unique=True
+#     )
+#     subtitle = FormElement(
+#         good=[None, "", "or The Whale"],
+#         bad=["A"*101]
+#     )
+#     author = FormElement(
+#         good=[Q(name="Herman Melville")],
+#         bad=[None, "", -1]
+#     )
+#     is_fiction = FormElement(
+#         good=[True, False, None, "", -1, "A"],
+#         bad=[]  # Boolean input is either truthy or falsy, so nothing is bad.
+#     )
+#     pages = FormElement(
+#         good=[0, 10, 100],
+#         bad=[None, "", "A"]
+#     )
+#     genre = FormElement(
+#         good=every_combo([
+#             Q(name="Mystery"),
+#             Q(name="History"),
+#             Q(name="Humor")
+#         ]),
+#         bad=[None]
+#     )
+#     additional_values = [
+#         ({'title': "A"*100, 'subtitle': "A"*50}, True),
+#         ({'title': "A"*50, 'subtitle': "A"*100}, True),
+#         ({'title': "A"*100, 'subtitle': "A"*51}, False),
+#         ({'title': "A"*51, 'subtitle': "A"*100}, False),
+#     ]
+
+
 class BookFormTest(FormTest):
     form = BookForm
     title = FormElement(
         good=["Moby Dick"],
-        bad=[None, "", "A"*101],
+        bad=[None],
         is_unique=True
     )
     subtitle = FormElement(
-        good=[None, "", "or The Whale"],
+        good=[None],
         bad=["A"*101]
     )
     author = FormElement(
         good=[Q(name="Herman Melville")],
-        bad=[None, "", -1]
+        bad=[None]
     )
     is_fiction = FormElement(
-        good=[True, False, None, "", -1, "A"],
+        good=[True],
         bad=[]  # Boolean input is either truthy or falsy, so nothing is bad.
     )
     pages = FormElement(
-        good=[0, 10, 100],
-        bad=[None, "", "A"]
+        good=[100],
+        bad=[None]
     )
     genre = FormElement(
         good=every_combo([
             Q(name="Mystery"),
-            Q(name="History"),
             Q(name="Humor")
         ]),
         bad=[None]
     )
     additional_values = [
         ({'title': "A"*100, 'subtitle': "A"*50}, True),
-        ({'title': "A"*50, 'subtitle': "A"*100}, True),
         ({'title': "A"*100, 'subtitle': "A"*51}, False),
-        ({'title': "A"*51, 'subtitle': "A"*100}, False),
     ]
 
 
@@ -78,7 +115,14 @@ class UtilTest(TestCase):
             {'a': 'C', 'b': 1, 'c': None},
         ]
 
-        assert list(x) == y
+        x = list(x)
+
+        # Compensate for non-deterministic dict insertion if using python <3.7.
+        if sys.version_info[:2] < (3, 7):
+            x.sort()
+            y.sort()
+
+        assert x == y
 
     def test_dict_combo_with_base_dict(self):
         x = dict_combo({
@@ -108,7 +152,14 @@ class UtilTest(TestCase):
             {'a': 'C', 'b': 1, 'c': None,  "d": "A", "e": 0, 'f': True},
         ]
 
-        assert list(x) == y
+        x = list(x)
+
+        # See note above.
+        if sys.version_info[:2] < (3, 7):
+            x.sort()
+            y.sort()
+
+        assert x == y
 
 
 class BookTestCase(TestCase):

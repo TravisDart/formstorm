@@ -24,7 +24,7 @@ class FormTest(object):
                 continue
 
             # Filter out this class's FormElement properties
-            form_element = getattr(self, e) 
+            form_element = getattr(self, e)
             if type(form_element) is FormElement:
                 elements[e] = form_element.build_iterator(
                     is_e2e=self.is_e2e,
@@ -123,28 +123,24 @@ class FormTest(object):
 
             if self._is_modelform:
                 if not has_run_uniqueness_test and form_is_good:
-                    # There's no way to verify that the uniqueness constraint 
+                    # There's no way to verify that the uniqueness constraint
                     # was the one that triggered the error. However, if the
                     # form was previously valid, and now it's not, and we've
                     # submitted the same input, then we can conclude that
                     # non-uniqueness was the issue.
                     self.submit_form(form_values)
                     assert not self.is_good()
+                    # Normally, we only test for valid/invalid, but let's
+                    # do a little extra and verify which fields caused errors.
                     for field in self.unique_elements:
                         assert self.bound_form.has_error(field)
                     has_run_uniqueness_test = True
 
                 transaction.savepoint_rollback(sid)
-        
+
         if should_run_uniqueness_test and not has_run_uniqueness_test:
             # If we make it to the end without having run the uniqueness test,
             # then it must be because no good input was specified.
             raise RuntimeError(
                 "Good input must be given to run uniqueness test."
             )
-
-    def run_uniqueness_tests(self):
-        pass
-
-    def run_individual_tests(self):
-        self._run(is_uniqueness_test=False)

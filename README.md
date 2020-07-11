@@ -1,8 +1,8 @@
 # FormStorm (v1.0.0)
 
-A library to test Django forms by trying (almost) every combination of valid and invalid input. Rather than testing each field's validation independently, formstorm tests all of the fields' validation simultaneously to ensure that there is no interdependence between fields.
+A library to test Django forms by trying (almost) every combination of valid and invalid input. Rather than testing each field's validation independently, formstorm tests all of the fields' validation simultaneously to ensure the form doesn't have unintended interdependence between fields.
 
-Note that Version 1 only verifies that there is no interdependence between fields. The next version will be able to test forms that have multi-field and interdependent validation.
+Currently, FormStorm supports testing pre-defined good/bad values, multi-field validation, and single-field uniqueness constraints.
 
 ## Example:
 
@@ -82,7 +82,7 @@ An example showing how to use different field types can be found in [tests/fstes
 
 Basically, all fields work as above, with the exception of ForeignKey and Many2Many fields whose values must be specified with `Q()` objects. Also, example values for multi-valued fields (such as Many2Many) can be created with the `every_combo()` function which returns every combination of the Many2Many options.
 
-To test the validation of multiple fields, 
+Validating multi-field constraints can be tested by specifying the values (as a dictionary) along with the expected results. For example, if the "title" and "subtitle" fields can't have a combined length greater than 150 characters, we can test this constraint as below:
 
     additional_values = [
         ({'title': "A"*100, 'subtitle': "A"*50}, True),
@@ -97,7 +97,68 @@ To test the validation of multiple fields,
 
 ## TODO:
 
-- Test to ensure that uniqueness constraints work. - Some provision for this feature has already been made, but it hasn't been fully implemented yet. 
-- End-to-end testing (with Selenium): This is partially implemented, and all of the necessary FormStorm functions have been abstracted. Just need to subclass FormTest and fully implement.
+
+- End-to-end testing (with Selenium): This is partially implemented, and most of the necessary FormStorm functions have been abstracted. Just need to subclass FormTest and fully implement.
 - Tests for DRF Serializers. "SerializerStorm"
 - Set up CI
+- Handle the obscure, "long tail" cases by implementing a framework to define tests for any type of constraint (such as multi-column uniqueness constraints). To do this, a "sub-test" would define one or more form submissions and the (boolean) result expected. Sub-tests would be combined with each other and with the standard combinatorial mix of good/bad values so that all fields are tested simultaneously. A tentative definition of the sub-tests is below:
+
+
+    sub_tests = [
+        { # Sub-test 1
+            field_names=["field1","field2",..."fieldN"],
+            submissions = [ Each sub-test consists of multilpe submissions.
+                (  # Submission 1 
+                    value1,  # the value for field1
+                    value2,  # the value for field2
+                    ...
+                    valueN,  # the value for fieldN
+                    result,  # the expected result of the submission
+                ),
+                (...), # Submission 2
+                ...
+                (...)  # Submission N
+            ]
+        },
+        {...}, # Sub-test 2
+        ...
+        {...}  # Sub-test N
+    ]
+
+For example, suppose a model has two fields that have a multi-column uniqueness constraint:
+
+    class SomeModel(models.Model):
+        field1 = models.TextField()
+        field2 = models.TextField()
+        field3 = models.TextField()
+        ...
+        fieldN = models.TextField()
+
+        class Meta:
+            constraints = [
+                UniqueConstraint(
+                    fields=['field1', 'field2'], name='unique_together'
+                )
+            ] 
+
+The sub-test to test this constraint would be defined like this:
+
+    class SomeModelFormTest(FormTest):
+    	form = SomeModelForm
+        sub_tests = [
+            {
+                field_names=["field1","field2"],
+                submissions = [
+                    ("a","a", True),
+                    ("a","b", True),  # Duplicate values in one column are fine
+                    ("b","a", True),  # ... as are duplicates in the other column
+                    ("a","a", False)  # ... but the same values again should fail
+                ]
+            }
+        ]
+        field3 = FormElement(good=[...], bad=[...])
+        ...
+        fieldN = FormElement(good=[...], bad=[...])
+
+The advantage of this is that we can define a test only for the fields affected by a constraint, and have values for the other fields supplied by the normal good/bad value tests.
+

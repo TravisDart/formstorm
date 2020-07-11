@@ -1,13 +1,13 @@
 from itertools import chain
 from django.db.models import Q
-from six import text_type
+# from six import text_type
 
 
 class FormElement(object):
     def __init__(self, good=[], bad=[], is_unique=False):
         self.bad = bad
         self.good = good
-        self.is_unique = is_unique 
+        self.is_unique = is_unique
 
     def build_iterator(self, form, field_name, is_e2e):
         """
@@ -26,19 +26,21 @@ class FormElement(object):
         def _get_pk_for_q(q_object):
             # 1st: Find the model that the field points to.
             form_field = form._meta.model._meta.get_field(field_name)
-            try:  # Python 3
-                ref_model = form_field.remote_field.model
-            except AttributeError:
-                ref_model = form_field.rel.to
+            ref_model = form_field.remote_field.model
 
             # 2nd: Get the object that the Q object points to.
             ref_object = ref_model.objects.get(q_object)
 
             # 3rd: Get the identifier for that object.
-            if is_e2e:  # If we're doing an e2e test, reference by name.
-                return text_type(ref_object)
-            else:
-                return ref_object.pk
+
+            # If we're doing an e2e test, reference by name.
+            # (e2e is not implemented yet)
+            # if is_e2e:
+            #     return text_type(ref_object)
+            # else:
+            #    return ref_object.pk
+
+            return ref_object.pk
 
         def _replace_all_q(value_list):
             for i, g in enumerate(value_list):

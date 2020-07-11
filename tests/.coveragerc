@@ -1,7 +1,7 @@
 [run]
 branch = true
 omit = fstest/wsgi.py, manage.py
-source = .
+source = .,../formstorm
 
 [report]
 show_missing = true
