@@ -112,6 +112,9 @@ class FormTest(object):
             form_values = {k: v[0] for k, v in i.items() if v[0] is not None}
 
             if self._is_modelform:
+                # The database must be rolled back after each form submission.
+                # Otherwise, each unique field would require a list of good
+                # values equal to the total number of tests.
                 sid = transaction.savepoint()
 
             self.submit_form(form_values)

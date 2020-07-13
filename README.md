@@ -1,12 +1,10 @@
 # FormStorm (v1.0.0)
 
-A library to test Django forms by trying (almost) every combination of valid and invalid input. Rather than testing each field's validation independently, formstorm tests all of the fields' validation simultaneously to ensure the form doesn't have unintended interdependence between fields.
-
-Currently, FormStorm supports testing pre-defined good/bad values, multi-field validation, and single-field uniqueness constraints.
+FormStorm is a Python library that easily creates unit tests for Django forms by defining valid/invalid values for each field. All combinations of the fields' predefined values are submitted to the form to validate each field and test for unintended interdependence between fields. In addition to testing single- and multi-field validation, FormStorm can also test single-field uniqueness constraints by double-submitting a valid submission and checking which fields become invalid on the 2nd submission.
 
 ## Example:
 
-Suppose we have a form to create a book object. The book's name is mandatory,
+Suppose we have a form to create a Book object. The book's name is mandatory,
 but the subtitle is optional. A `FormTest` is created that provides examples 
 of valid and invalid values for each field:
 
@@ -82,7 +80,7 @@ An example showing how to use different field types can be found in [tests/fstes
 
 Basically, all fields work as above, with the exception of ForeignKey and Many2Many fields whose values must be specified with `Q()` objects. Also, example values for multi-valued fields (such as Many2Many) can be created with the `every_combo()` function which returns every combination of the Many2Many options.
 
-Validating multi-field constraints can be tested by specifying the values (as a dictionary) along with the expected results. For example, if the "title" and "subtitle" fields can't have a combined length greater than 150 characters, we can test this constraint as below:
+Validating multi-field constraints can be tested by specifying the values (as a dictionary) along with the expected results. For example, if the "title" and "subtitle" fields can't have a combined length greater than 150 characters, we can test this constraint like so:
 
     additional_values = [
         ({'title': "A"*100, 'subtitle': "A"*50}, True),
@@ -161,4 +159,3 @@ The sub-test to test this constraint would be defined like this:
         fieldN = FormElement(good=[...], bad=[...])
 
 The advantage of this is that we can define a test only for the fields affected by a constraint, and have values for the other fields supplied by the normal good/bad value tests.
-
