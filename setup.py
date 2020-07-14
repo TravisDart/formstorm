@@ -1,13 +1,14 @@
 from setuptools import find_packages, setup
 from formstorm import __version__ as version_string
 
+
 setup(
     name='formstorm',
     version=version_string,
     url='https://github.com/TravisDart/formstorm/',
     description=(
-        'A tool to test Django forms by trying (almost) every '
-        'combination of valid and invalid input.'
+        'FormStorm is a Python library that easily creates unit tests for '
+        'Django forms by defining valid/invalid values for each field.'
     ),
     license='MIT',
     author='Travis Dart',
@@ -22,6 +23,4 @@ setup(
         'Topic :: Software Development :: Testing',
     ],
     packages=find_packages(),
-    include_package_data=True,
-    tests_require=['django'],
 )

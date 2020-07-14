@@ -7,78 +7,42 @@ from .models import Author, Genre
 from django.db.models import Q
 
 
-# class BookFormTest(FormTest):
-#     form = BookForm
-#     title = FormElement(
-#         good=["Moby Dick"],
-#         bad=[None, "", "A"*101],
-#         is_unique=True
-#     )
-#     subtitle = FormElement(
-#         good=[None, "", "or The Whale"],
-#         bad=["A"*101]
-#     )
-#     author = FormElement(
-#         good=[Q(name="Herman Melville")],
-#         bad=[None, "", -1]
-#     )
-#     is_fiction = FormElement(
-#         good=[True, False, None, "", -1, "A"],
-#         bad=[]  # Boolean input is either truthy or falsy, so nothing is bad.
-#     )
-#     pages = FormElement(
-#         good=[0, 10, 100],
-#         bad=[None, "", "A"]
-#     )
-#     genre = FormElement(
-#         good=every_combo([
-#             Q(name="Mystery"),
-#             Q(name="History"),
-#             Q(name="Humor")
-#         ]),
-#         bad=[None]
-#     )
-#     additional_values = [
-#         ({'title': "A"*100, 'subtitle': "A"*50}, True),
-#         ({'title': "A"*50, 'subtitle': "A"*100}, True),
-#         ({'title': "A"*100, 'subtitle': "A"*51}, False),
-#         ({'title': "A"*51, 'subtitle': "A"*100}, False),
-#     ]
-
-
 class BookFormTest(FormTest):
     form = BookForm
     title = FormElement(
         good=["Moby Dick"],
-        bad=[None],
+        bad=[None, "", "A"*101],
         is_unique=True
     )
     subtitle = FormElement(
-        good=[None],
+        good=[None, "", "or The Whale"],
         bad=["A"*101]
     )
     author = FormElement(
         good=[Q(name="Herman Melville")],
-        bad=[None]
+        bad=[None, "", -1]
     )
     is_fiction = FormElement(
-        good=[True],
+        good=[True, False, None, "", -1, "A"],
         bad=[]  # Boolean input is either truthy or falsy, so nothing is bad.
     )
     pages = FormElement(
-        good=[100],
-        bad=[None]
+        good=[0, 10, 100],
+        bad=[None, "", "A"]
     )
     genre = FormElement(
         good=every_combo([
             Q(name="Mystery"),
+            Q(name="History"),
             Q(name="Humor")
         ]),
         bad=[None]
     )
     additional_values = [
         ({'title': "A"*100, 'subtitle': "A"*50}, True),
+        ({'title': "A"*50, 'subtitle': "A"*100}, True),
         ({'title': "A"*100, 'subtitle': "A"*51}, False),
+        ({'title': "A"*51, 'subtitle': "A"*100}, False),
     ]
 
 
