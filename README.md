@@ -1,6 +1,6 @@
-# FormStorm (v1.0.0)
+# FormStorm (v1.0)
 
-FormStorm is a Python library that easily creates unit tests for Django forms by defining valid/invalid values for each field. All combinations of the fields' predefined values are submitted to the form to validate each field and test for unintended interdependence between fields. In addition to testing single- and multi-field validation, FormStorm can also test single-field uniqueness constraints by double-submitting a valid submission and checking which fields become invalid on the 2nd submission.
+FormStorm is a Python library that easily creates unit tests for Django forms. Given valid and invalid values for each field, the library computes every combination of the fields' values and submits them to the form. This validates all of the fields and tests for unintended interdependence between fields. In addition to testing single- and multi-field validation, FormStorm can also test single-field uniqueness constraints by double-submitting a valid submission and checking which fields become invalid on the 2nd submission.
 
 ## Example:
 
@@ -99,8 +99,10 @@ Validating multi-field constraints can be tested by specifying the values (as a 
 - End-to-end testing (with Selenium): This is partially implemented, and most of the necessary FormStorm functions have been abstracted. Just need to subclass FormTest and fully implement.
 - Tests for DRF Serializers. "SerializerStorm"
 - Set up CI
-- Handle the obscure, "long tail" cases by implementing a framework to define tests for any type of constraint (such as multi-column uniqueness constraints). To do this, a "sub-test" would define one or more form submissions and the (boolean) result expected. Sub-tests would be combined with each other and with the standard combinatorial mix of good/bad values so that all fields are tested simultaneously. A tentative definition of the sub-tests is below:
+- Handle the obscure, "long tail" cases by implementing a framework to define tests for any type of constraint (such as multi-column uniqueness constraints). To do this, a "sub-test" would define one or more form submissions and the (boolean) result expected. Sub-tests would be combined with each other and with the standard combinatorial mix of good/bad values so that all fields are tested simultaneously.
 
+
+A tentative definition of the sub-tests is below:
 
     sub_tests = [
         { # Sub-test 1
