@@ -1,0 +1,12 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+parallel = True
+omit =
+    fstest/wsgi.py
+    manage.py
+
+[report]
+fail_under = 100
+exclude_lines =
+    if __name__ == "__main__":

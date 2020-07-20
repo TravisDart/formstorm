@@ -1,11 +1,12 @@
 from setuptools import find_packages, setup
 from formstorm import __version__ as version_string
 from os import path
+import io
 
 
 this_directory = path.abspath(path.dirname(__file__))
 readme_path = path.join(this_directory, 'README.md')
-with open(readme_path, encoding='utf-8') as f:
+with io.open(readme_path, encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -30,5 +31,6 @@ setup(
     ],
     packages=find_packages(),
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
+    install_requires=["Django>=1.11"],
 )
