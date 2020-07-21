@@ -3,12 +3,20 @@ from formstorm import FormTest, FormElement
 from .forms import NameForm, BookForm
 
 
+class BadNameFormTest(FormTest):
+    form = NameForm
+    your_name = FormElement(
+        good=["Ishmael"],
+        bad=["A"*101, "", None],
+        is_unique=True
+    )
+
+
 class NameFormTest(FormTest):
     form = NameForm
     your_name = FormElement(
-        good=["or The Whale", "", None],
-        bad=["A"*101],
-        is_unique=True
+        good=["Ishmael"],
+        bad=["A"*101, "", None],
     )
 
 
@@ -30,16 +38,24 @@ class BadFormTest(FormTest):
     )
 
 
+class BadNameTestCase(TestCase):
+    def setUp(self):
+        self.theBadNameFormTest = BadNameFormTest()
+
+    def test_name_form(self):
+        with self.assertRaises(RuntimeError) as context:
+            self.theBadNameFormTest.run()
+
+        expected_message = 'Uniqueness tests can only be run on ModelForms'
+        assert str(context.exception) == expected_message
+
+
 class NameTestCase(TestCase):
     def setUp(self):
         self.theNameFormTest = NameFormTest()
 
-    def test_name_form(self):
-        with self.assertRaises(RuntimeError) as context:
-            self.theNameFormTest.run()
-
-        expected_message = 'Uniqueness tests can only be run on ModelForms'
-        assert str(context.exception) == expected_message
+    def test_book_form(self):
+        self.theNameFormTest.run()
 
 
 class BookTestCase(TestCase):
