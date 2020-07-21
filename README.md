@@ -1,4 +1,6 @@
-# FormStorm (v1.0)
+# FormStorm (v1.0) [![Build Status](https://travis-ci.org/TravisDart/formstorm.svg?branch=master)](https://travis-ci.org/TravisDart/formstorm)  [![codecov](https://codecov.io/gh/TravisDart/formstorm/branch/master/graph/badge.svg)](https://codecov.io/gh/TravisDart/formstorm)
+
+
 
 FormStorm is a Python library that easily creates unit tests for Django forms. Given valid and invalid values for each field, the library computes every combination of the fields' values and submits them to the form. This validates all of the fields and tests for unintended interdependence between fields. In addition to testing single- and multi-field validation, FormStorm can also test single-field uniqueness constraints by double-submitting a valid submission and checking which fields become invalid on the 2nd submission.
 
@@ -76,7 +78,7 @@ how you intend it to.
 
 ## Advanced Example:
 
-An example showing how to use different field types can be found in [tests/fstestapp/test.py](tests/fstestapp/test.py).
+An example showing how to use different field types can be found in [tests/fstestapp/tests.py](tests/fstestapp/tests.py).
 
 Basically, all fields work as above, with the exception of ForeignKey and Many2Many fields whose values must be specified with `Q()` objects. Also, example values for multi-valued fields (such as Many2Many) can be created with the `every_combo()` function which returns every combination of the Many2Many options.
 
